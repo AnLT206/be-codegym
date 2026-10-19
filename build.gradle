@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group = 'com.codegym'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Servlet API và JSP API (Provided by Tomcat server)
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    compileOnly 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.3'
+
+    // JSTL (JavaServer Pages Standard Tag Library)
+    implementation 'javax.servlet:jstl:1.2'
+
+    // MySQL Connector / J (JDBC Driver)
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
+
+    // Thư viện kiểm thử (nếu cần)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+// Cấu hình mã hóa UTF-8 cho quá trình biên dịch
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+war {
+    archiveFileName = 'ProductManagement.war'
+}
+
+// Task copy các file jar phụ thuộc vào WEB-INF/lib để chạy không cần maven/gradle
+task copyLibsToWebInf(type: Copy) {
+    from configurations.runtimeClasspath
+    into 'src/main/webapp/WEB-INF/lib'
+}
